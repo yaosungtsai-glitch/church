@@ -1,75 +1,47 @@
 <?php
-/**
- * Company: 
- * Program: index.php
- * Author:  Ken Tsai
- * Date:    from 2005.03.25
- * Version: 2.0
- * Description: 首頁中央區塊內容
- */
+include_once('mainfile.php');
 
-header("location:administrator.php?op=login")
+function menu(){
+    include_once('header.php');
 
-//include_once ("mainfile.php");
-
-
-/**
- * 顯示首頁中央區塊
- * @back    是否顯示「回上一頁」之連結(1:顯示,0:不顯示)，於footer.php中判斷
- */
-/*
-function middleblocks($back=0)
-{
-    include_once("header.php");
-    $tablebegin = "<table border='0' width='95%' align='center' cellspacing='0' cellpadding='0'>"
-        		 ."<tr valign='top'><td>";
-    $tableend = "</td></tr></table>";
-    $samerow = "</td><td width='12'>&nbsp;</td><td>";
-    $diffrow = $tableend."<br>".$tablebegin;
-    echo $tablebegin;
-
-    $f = 1;		//設第一個區塊不用比對是否同一列
-    $strSQL = "select url,content,weight,position from ".ADOPREFIX."_blocks where bkey='index' and active=1 order by weight,position";
-    $rs = $GLOBALS['adoconn']->Execute($strSQL);
-    while ($rs && !$rs->EOF)
-	{
-        $url = $rs->fields['url'];
-        $content = $rs->fields['content'];
-        $weight = $rs->fields['weight'];
-        $position = $rs->fields['position'];
-		if ($url && trim($url) != "") {
-	        if (file_exists($url)) {
-	            if ($f != 1) {  //第2個區塊後比對是同一列或要換列
-	                if ($t == $weight) {
-	                    $strhtml = $samerow;
-	                } else {
-	                    $strhtml = $diffrow;
-	                }
-	            }
-	            if(isset($strhtml)) echo $strhtml;
-	            include_once($url);
-	            $t = $weight;
-	            $f++;
-	        }
-	    } else if ($content && trim($content) != "") {
-	    		if ($f != 1) {  //第2個區塊後比對是同一列或要換列
-	                if ($t == $weight) {
-	                    $strhtml = $samerow;
-	                } else {
-	                    $strhtml = $diffrow;
-	                }
-	            }
-	            echo $strhtml.$content;
-	            $t = $weight;
-	            $f++;
-	    }
-        $rs->MoveNext();
+}
+function checkin() {
+    menu();
+    OpenTable();
+    echo "<h1>Checkin</h1>".PHP_EOL;
+    echo "<form action='".$SERVER['PHP_SELF']."' method='post'>".PHP_EOL;
+    echo "<input type='hidden' name='op' value='checkinexec'>".PHP_EOL;
+    echo "<input type='text' name='chkid' autofocus required >".PHP_EOL;
+    echo "<input type='submit' value='"._OK."'>".PHP_EOL;
+    echo "</form>".PHP_EOL;
+    CloseTable();
+    echo "</br>";
+    include_once('footer.php');
+}
+function checkinexec() {
+    if (isset($_REQUEST['chkid'])) {
+        $sql="select count(id) as count,id,cellphone from ".ADOPREFIX."_user where enable='1' and cellphone=?";
+        $handle=$GLOBALS['adoconn']->prepare($sql);
+        $bindVariables = array(0=>$_REQUEST['chkid']);
+        $result = $GLOBALS['adoconn']->execute($handle, $bindVariables);
+        if($recordCount>0){
+            $sql="insert into ".ADOPREFIX."_checkin(userid,cellphone,create_time) values()";
+            header("Location: ".$_SERVER['PHP_SELF']."?op=checkin&chkid=".$_REQUEST['chkid']);    
+        }else
+            header("Location: ".$_SERVER['PHP_SELF']."?op=checkin");
     }
-    if ($rs) $rs->Close();
-    echo $tableend;
-    include_once("footer.php");
+
 }
 
-middleblocks(0); //傳入0則網頁下方不顯示「回上一頁」之link，於footer.php中判斷
- */
+
+switch ($_REQUEST['op']) {
+    default:
+	case 'checkin':
+		checkin();
+		break;
+	case 'checkinexec':
+		checkinexec();
+		break;
+}
+
 ?>
