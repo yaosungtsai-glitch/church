@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- 主機： localhost
--- 產生時間： 2025 年 10 月 20 日 17:55
--- 伺服器版本： 10.4.28-MariaDB
--- PHP 版本： 8.2.4
+-- 主機： 127.0.0.1
+-- 產生時間： 2026-03-31 08:20:27
+-- 伺服器版本： 10.4.32-MariaDB
+-- PHP 版本： 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- 資料庫： `21c`
+-- 資料庫： `church`
 --
 
 -- --------------------------------------------------------
@@ -29,10 +29,10 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `church_authors` (
   `id` int(11) NOT NULL COMMENT '管理員編號',
-  `aid` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '管理員登入帳號',
-  `pwd` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '管理員密碼',
-  `aname` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '管理員姓名',
-  `email` varchar(60) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '管理員email',
+  `aid` varchar(30) NOT NULL COMMENT '管理員登入帳號',
+  `pwd` varchar(100) NOT NULL COMMENT '管理員密碼',
+  `aname` varchar(30) NOT NULL COMMENT '管理員姓名',
+  `email` varchar(60) NOT NULL COMMENT '管理員email',
   `enable` tinyint(4) NOT NULL DEFAULT 1 COMMENT '是否啟用(0. 不啟用 1.啟用)'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='管理員基本資料';
 
@@ -107,8 +107,8 @@ CREATE TABLE `church_customer_label` (
 
 CREATE TABLE `church_function` (
   `id` int(11) NOT NULL COMMENT '權限流水號',
-  `fid` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '權限代號(OP)',
-  `fname` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '權限名稱',
+  `fid` varchar(30) NOT NULL COMMENT '權限代號(OP)',
+  `fname` varchar(50) NOT NULL COMMENT '權限名稱',
   `fsort` int(11) NOT NULL DEFAULT 1 COMMENT '排序',
   `enable` tinyint(4) NOT NULL DEFAULT 1 COMMENT '是否啟用 (1.啟用 0.不啟用)'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='功能(權限)基本資料';
@@ -130,8 +130,8 @@ INSERT INTO `church_function` (`id`, `fid`, `fname`, `fsort`, `enable`) VALUES
 
 CREATE TABLE `church_group` (
   `id` int(11) NOT NULL COMMENT '群組流水號',
-  `gid` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '群組代號',
-  `gname` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '群組名稱',
+  `gid` varchar(30) NOT NULL COMMENT '群組代號',
+  `gname` varchar(50) NOT NULL COMMENT '群組名稱',
   `enable` tinyint(4) NOT NULL DEFAULT 1 COMMENT '是否啟用 (1.啟用 0.不啟用)'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='群組基本資料';
 
@@ -152,8 +152,8 @@ CREATE TABLE `church_groupfunction` (
   `id` int(11) NOT NULL COMMENT '流水號',
   `gid` int(11) NOT NULL DEFAULT 0 COMMENT '群組流水號',
   `fid` int(11) NOT NULL DEFAULT 0 COMMENT '權限流水號',
-  `lastupdate` varchar(19) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '修改日期',
-  `sysadm` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '修改者(管理員登入帳號)'
+  `lastupdate` varchar(19) NOT NULL COMMENT '修改日期',
+  `sysadm` varchar(30) NOT NULL COMMENT '修改者(管理員登入帳號)'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='記錄群組有那些功能(權限)';
 
 -- --------------------------------------------------------
@@ -166,8 +166,8 @@ CREATE TABLE `church_groupuser` (
   `id` int(11) NOT NULL COMMENT '流水號',
   `gid` int(11) NOT NULL DEFAULT 0 COMMENT '群組流水號',
   `aid` int(11) NOT NULL DEFAULT 0 COMMENT '管理員流水號',
-  `lastupdate` varchar(19) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '修改日期',
-  `sysadm` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '修改者(管理員登入帳號)'
+  `lastupdate` varchar(19) NOT NULL COMMENT '修改日期',
+  `sysadm` varchar(30) NOT NULL COMMENT '修改者(管理員登入帳號)'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='記錄群組有那些管理員';
 
 -- --------------------------------------------------------
@@ -184,7 +184,7 @@ CREATE TABLE `church_ipmanage` (
   `ipsec3` int(11) NOT NULL DEFAULT 0 COMMENT 'IP位置 class C',
   `ipsec4` int(11) NOT NULL DEFAULT 0 COMMENT 'IP位置 class D (開始)',
   `ipsec5` int(11) NOT NULL DEFAULT 0 COMMENT 'IP位置 class D (結束)'
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='service介面IP登入管理';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='service介面IP登入管理';
 
 --
 -- 傾印資料表的資料 `church_ipmanage`
@@ -201,12 +201,12 @@ INSERT INTO `church_ipmanage` (`id`, `storeid`, `ipsec1`, `ipsec2`, `ipsec3`, `i
 
 CREATE TABLE `church_login_log` (
   `log_id` int(11) NOT NULL COMMENT '流水號',
-  `log_loginname` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0' COMMENT '管理員登入帳號',
+  `log_loginname` varchar(20) NOT NULL DEFAULT '0' COMMENT '管理員登入帳號',
   `log_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '動作時間',
-  `log_op` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '使用的後台管理功能代號',
-  `log_op2` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '使用的後台管理功能細項代號 ',
-  `log_title` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '使用的後台管理功能名稱',
-  `log_ip` text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '登入的位址'
+  `log_op` varchar(50) DEFAULT NULL COMMENT '使用的後台管理功能代號',
+  `log_op2` varchar(50) DEFAULT NULL COMMENT '使用的後台管理功能細項代號 ',
+  `log_title` varchar(100) NOT NULL COMMENT '使用的後台管理功能名稱',
+  `log_ip` text NOT NULL COMMENT '登入的位址'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='管理員後台使用記錄';
 
 -- --------------------------------------------------------
@@ -219,25 +219,9 @@ CREATE TABLE `church_permit` (
   `id` int(11) NOT NULL COMMENT '流水號',
   `aid` int(11) NOT NULL DEFAULT 0 COMMENT '管理員流水號',
   `fid` int(11) NOT NULL DEFAULT 0 COMMENT '權限流水號',
-  `lastupdate` varchar(19) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '修改日期',
-  `sysadm` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '修改者登入帳號'
+  `lastupdate` varchar(19) NOT NULL COMMENT '修改日期',
+  `sysadm` varchar(30) NOT NULL COMMENT '修改者登入帳號'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='記錄管理者有那些功能的使用權限';
-
---
--- 傾印資料表的資料 `church_permit`
---
-
-INSERT INTO `church_permit` (`id`, `aid`, `fid`, `lastupdate`, `sysadm`) VALUES
-(42, 1, 1, '2012-12-20 14:26:37', 'admin'),
-(43, 1, 2, '2012-12-20 14:26:37', 'admin'),
-(44, 1, 3, '2012-12-20 14:26:37', 'admin'),
-(45, 1, 4, '2012-12-20 14:26:37', 'admin'),
-(46, 1, 5, '2012-12-20 14:26:37', 'admin'),
-(47, 1, 6, '2012-12-20 14:26:37', 'admin'),
-(48, 1, 7, '2012-12-20 14:26:37', 'admin'),
-(49, 1, 8, '2012-12-20 14:26:37', 'admin'),
-(50, 1, 9, '2012-12-20 14:26:37', 'admin'),
-(51, 1, 10, '2012-12-20 14:26:37', 'admin');
 
 -- --------------------------------------------------------
 
@@ -247,9 +231,9 @@ INSERT INTO `church_permit` (`id`, `aid`, `fid`, `lastupdate`, `sysadm`) VALUES
 
 CREATE TABLE `church_store` (
   `id` int(8) NOT NULL COMMENT '商店編號',
-  `name` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '商店編號',
+  `name` varchar(100) NOT NULL COMMENT '商店編號',
   `ipmanage` tinyint(4) NOT NULL DEFAULT 0 COMMENT '是否控管可登入IP位置(1. 控管 0. 不控管)',
-  `enable` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '是否啟用 (1. 啟用 0. 不啟用)'
+  `enable` char(1) NOT NULL COMMENT '是否啟用 (1. 啟用 0. 不啟用)'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='活動單位部門資料';
 
 --
@@ -267,8 +251,8 @@ INSERT INTO `church_store` (`id`, `name`, `ipmanage`, `enable`) VALUES
 
 CREATE TABLE `church_storeadmin` (
   `sid` int(11) NOT NULL COMMENT '商店Service介面登入流水號',
-  `said` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '登入帳號',
-  `sapw` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '登入密碼',
+  `said` varchar(30) NOT NULL COMMENT '登入帳號',
+  `sapw` varchar(30) NOT NULL COMMENT '登入密碼',
   `storeid` int(11) NOT NULL DEFAULT 0 COMMENT '商店/組織/單位編號',
   `enable` tinyint(4) NOT NULL DEFAULT 0 COMMENT '是否啟用(0. 不啟用 1.啟用)'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='商店Service介面登入帳號基本資料';
@@ -288,12 +272,12 @@ INSERT INTO `church_storeadmin` (`sid`, `said`, `sapw`, `storeid`, `enable`) VAL
 
 CREATE TABLE `church_storeadmin_login` (
   `id` int(11) NOT NULL COMMENT '流水號',
-  `loginname` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '登入帳號',
+  `loginname` varchar(20) NOT NULL COMMENT '登入帳號',
   `time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '登入時間',
-  `op` text CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '功能',
-  `op2` text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'op2代號名稱',
-  `function` text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'OP功能名稱',
-  `ip` text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '登入IP位置'
+  `op` text DEFAULT NULL COMMENT '功能',
+  `op2` text NOT NULL COMMENT 'op2代號名稱',
+  `function` text NOT NULL COMMENT 'OP功能名稱',
+  `ip` text NOT NULL COMMENT '登入IP位置'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='商店管理帳號使用管理功能記錄';
 
 -- --------------------------------------------------------
@@ -304,8 +288,8 @@ CREATE TABLE `church_storeadmin_login` (
 
 CREATE TABLE `church_storefunction` (
   `id` int(11) NOT NULL COMMENT '商店Service介面管理功能流水號',
-  `sfid` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '管理功能代碼',
-  `sfname` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '管理功能名稱',
+  `sfid` varchar(30) NOT NULL COMMENT '管理功能代碼',
+  `sfname` varchar(100) NOT NULL COMMENT '管理功能名稱',
   `enable` tinyint(4) NOT NULL DEFAULT 0 COMMENT '是否啟用(0. 不啟用 1.啟用)'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='商店Service介面管理功能基本資料';
 
@@ -328,8 +312,8 @@ CREATE TABLE `church_storepermit` (
   `id` int(11) NOT NULL COMMENT '流水號',
   `sid` int(11) NOT NULL DEFAULT 0 COMMENT '商店Service介面登入流水號',
   `fid` int(11) NOT NULL DEFAULT 0 COMMENT '商店Service介面管理功能流水號',
-  `lastmod` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '最後修改時間',
-  `admin` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '修改者'
+  `lastmod` varchar(20) NOT NULL COMMENT '最後修改時間',
+  `admin` varchar(30) NOT NULL COMMENT '修改者'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='商店Service介面權限記錄';
 
 --
@@ -342,13 +326,44 @@ INSERT INTO `church_storepermit` (`id`, `sid`, `fid`, `lastmod`, `admin`) VALUES
 -- --------------------------------------------------------
 
 --
+-- 資料表結構 `church_user`
+--
+
+CREATE TABLE `church_user` (
+  `id` int(11) NOT NULL COMMENT '會員編號',
+  `username` varchar(60) NOT NULL COMMENT '會員姓名/公司名稱',
+  `image` varchar(100) DEFAULT NULL COMMENT '會員照片圖檔',
+  `useridno` varchar(20) DEFAULT NULL COMMENT '身份証號/護照號碼/統一編號',
+  `gender` tinyint(1) NOT NULL COMMENT '性別 1:男  0:女',
+  `useremail` varchar(60) NOT NULL COMMENT 'email address',
+  `birthday` date NOT NULL COMMENT '生日',
+  `address` varchar(250) NOT NULL COMMENT '地址',
+  `homephone` varchar(20) DEFAULT NULL COMMENT '家用電話',
+  `officephone` varchar(20) DEFAULT NULL COMMENT '公司電話',
+  `cellphone` varchar(20) NOT NULL COMMENT '行動電話',
+  `fax` varchar(20) DEFAULT NULL COMMENT '傳真',
+  `intro` text DEFAULT NULL COMMENT '會員簡介',
+  `enable` tinyint(1) NOT NULL COMMENT '是否啟用 1:是 0:否',
+  `ipmanage` tinyint(1) NOT NULL DEFAULT 0 COMMENT '登入IP是否控管 1:是 0:否'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='會員基本資料';
+
+--
+-- 傾印資料表的資料 `church_user`
+--
+
+INSERT INTO `church_user` (`id`, `username`, `image`, `useridno`, `gender`, `useremail`, `birthday`, `address`, `homephone`, `officephone`, `cellphone`, `fax`, `intro`, `enable`, `ipmanage`) VALUES
+(1, '蔡耀松', NULL, NULL, 1, 'yaosung.tsai@gmail.com', '1970-10-28', '', NULL, NULL, '0935287902', NULL, NULL, 1, 0);
+
+-- --------------------------------------------------------
+
+--
 -- 資料表結構 `church_useradmin`
 --
 
 CREATE TABLE `church_useradmin` (
   `sid` int(11) NOT NULL COMMENT '商店Service介面登入流水號',
-  `said` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '登入帳號',
-  `sapw` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '登入密碼',
+  `said` varchar(30) NOT NULL COMMENT '登入帳號',
+  `sapw` varchar(30) NOT NULL COMMENT '登入密碼',
   `storeid` int(11) NOT NULL DEFAULT 0 COMMENT '商店/組織/單位編號',
   `enable` tinyint(4) NOT NULL DEFAULT 0 COMMENT '是否啟用(0. 不啟用 1.啟用)'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='Userlogin介面登入帳號基本資料';
@@ -368,10 +383,10 @@ INSERT INTO `church_useradmin` (`sid`, `said`, `sapw`, `storeid`, `enable`) VALU
 
 CREATE TABLE `church_useradmin_login` (
   `id` int(11) NOT NULL COMMENT '流水號',
-  `loginname` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '登入帳號',
+  `loginname` varchar(20) NOT NULL COMMENT '登入帳號',
   `time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '登入時間',
-  `op` text CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '功能',
-  `ip` text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '登入IP位置'
+  `op` text DEFAULT NULL COMMENT '功能',
+  `ip` text NOT NULL COMMENT '登入IP位置'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='Userlogin管理帳號使用管理功能記錄';
 
 --
@@ -389,8 +404,8 @@ INSERT INTO `church_useradmin_login` (`id`, `loginname`, `time`, `op`, `ip`) VAL
 
 CREATE TABLE `church_userfunction` (
   `id` int(11) NOT NULL COMMENT '商店Service介面管理功能流水號',
-  `sfid` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '管理功能代碼',
-  `sfname` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '管理功能名稱',
+  `sfid` varchar(30) NOT NULL COMMENT '管理功能代碼',
+  `sfname` varchar(100) NOT NULL COMMENT '管理功能名稱',
   `enable` tinyint(4) NOT NULL DEFAULT 0 COMMENT '是否啟用(0. 不啟用 1.啟用)'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='userlogin介面管理功能基本資料';
 
@@ -412,9 +427,32 @@ CREATE TABLE `church_userpermit` (
   `id` int(11) NOT NULL COMMENT '流水號',
   `sid` int(11) NOT NULL DEFAULT 0 COMMENT '商店Service介面登入流水號',
   `fid` int(11) NOT NULL DEFAULT 0 COMMENT '商店Service介面管理功能流水號',
-  `lastmod` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '最後修改時間',
-  `admin` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '修改者'
+  `lastmod` varchar(20) NOT NULL COMMENT '最後修改時間',
+  `admin` varchar(30) NOT NULL COMMENT '修改者'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='商店Service介面權限記錄';
+
+-- --------------------------------------------------------
+
+--
+-- 資料表結構 `church_user_checkin`
+--
+
+CREATE TABLE `church_user_checkin` (
+  `id` bigint(20) NOT NULL COMMENT 'PK, Auto',
+  `userid` int(11) NOT NULL COMMENT 'FK->user',
+  `arrive_time` datetime NOT NULL COMMENT '到達時間'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='會友到達時間';
+
+--
+-- 傾印資料表的資料 `church_user_checkin`
+--
+
+INSERT INTO `church_user_checkin` (`id`, `userid`, `arrive_time`) VALUES
+(1, 1, '2026-03-31 13:25:23'),
+(2, 1, '2026-03-31 13:38:24'),
+(3, 1, '2026-03-31 13:43:06'),
+(4, 1, '2026-03-31 14:01:18'),
+(5, 1, '2026-03-31 14:02:47');
 
 -- --------------------------------------------------------
 
@@ -438,30 +476,6 @@ CREATE TABLE `church_user_ipmanage` (
 
 INSERT INTO `church_user_ipmanage` (`id`, `userid`, `ipsec1`, `ipsec2`, `ipsec3`, `ipsec4`, `ipsec5`) VALUES
 (1, 1, 192, 168, 1, 1, 100);
-
--- --------------------------------------------------------
-
---
--- 資料表結構 `XXX_church_user`
---
-
-CREATE TABLE `XXX_church_user` (
-  `id` int(11) NOT NULL COMMENT '會員編號',
-  `username` varchar(60) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '會員姓名/公司名稱',
-  `image` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '會員照片圖檔',
-  `useridno` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '身份証號/護照號碼/統一編號',
-  `sex` tinyint(1) NOT NULL COMMENT '性別 1:男  0:女',
-  `useremail` varchar(60) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'email address',
-  `birthday` varchar(19) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '生日',
-  `address` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '地址',
-  `homephone` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '家用電話',
-  `officephone` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '公司電話',
-  `cellphone` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '行動電話',
-  `fax` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '傳真',
-  `intro` text CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '會員簡介',
-  `enable` tinyint(1) NOT NULL COMMENT '是否啟用 1:是 0:否',
-  `ipmanage` tinyint(1) NOT NULL DEFAULT 0 COMMENT '登入IP是否控管 1:是 0:否'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='會員基本資料';
 
 --
 -- 已傾印資料表的索引
@@ -564,6 +578,13 @@ ALTER TABLE `church_storepermit`
   ADD PRIMARY KEY (`id`);
 
 --
+-- 資料表索引 `church_user`
+--
+ALTER TABLE `church_user`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `useremail` (`useremail`);
+
+--
 -- 資料表索引 `church_useradmin`
 --
 ALTER TABLE `church_useradmin`
@@ -588,17 +609,16 @@ ALTER TABLE `church_userpermit`
   ADD PRIMARY KEY (`id`);
 
 --
+-- 資料表索引 `church_user_checkin`
+--
+ALTER TABLE `church_user_checkin`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- 資料表索引 `church_user_ipmanage`
 --
 ALTER TABLE `church_user_ipmanage`
   ADD PRIMARY KEY (`id`);
-
---
--- 資料表索引 `XXX_church_user`
---
-ALTER TABLE `XXX_church_user`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `useremail` (`useremail`);
 
 --
 -- 在傾印的資料表使用自動遞增(AUTO_INCREMENT)
@@ -701,6 +721,12 @@ ALTER TABLE `church_storepermit`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '流水號', AUTO_INCREMENT=7;
 
 --
+-- 使用資料表自動遞增(AUTO_INCREMENT) `church_user`
+--
+ALTER TABLE `church_user`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '會員編號', AUTO_INCREMENT=2;
+
+--
 -- 使用資料表自動遞增(AUTO_INCREMENT) `church_useradmin`
 --
 ALTER TABLE `church_useradmin`
@@ -725,16 +751,16 @@ ALTER TABLE `church_userpermit`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '流水號';
 
 --
+-- 使用資料表自動遞增(AUTO_INCREMENT) `church_user_checkin`
+--
+ALTER TABLE `church_user_checkin`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'PK, Auto', AUTO_INCREMENT=6;
+
+--
 -- 使用資料表自動遞增(AUTO_INCREMENT) `church_user_ipmanage`
 --
 ALTER TABLE `church_user_ipmanage`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '流水號', AUTO_INCREMENT=2;
-
---
--- 使用資料表自動遞增(AUTO_INCREMENT) `XXX_church_user`
---
-ALTER TABLE `XXX_church_user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '會員編號';
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
