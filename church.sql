@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2026-04-08 12:34:21
+-- 產生時間： 2026-04-09 12:08:25
 -- 伺服器版本： 10.4.32-MariaDB
 -- PHP 版本： 8.2.12
 
@@ -41,7 +41,8 @@ CREATE TABLE `church_authors` (
 --
 
 INSERT INTO `church_authors` (`id`, `aid`, `pwd`, `aname`, `email`, `enable`) VALUES
-(1, 'admin', 'PASSWORD', 'ADMIN', 'admin@', 1);
+(1, 'admin', 'PASSWORD', 'ADMIN', 'admin@', 1),
+(3, 'ADMIN', 'PASSWORD', 'ADMIN', 'admin@domain', 1);
 
 -- --------------------------------------------------------
 
@@ -223,6 +224,14 @@ CREATE TABLE `church_permit` (
   `sysadm` varchar(30) NOT NULL COMMENT '修改者登入帳號'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='記錄管理者有那些功能的使用權限';
 
+--
+-- 傾印資料表的資料 `church_permit`
+--
+
+INSERT INTO `church_permit` (`id`, `aid`, `fid`, `lastupdate`, `sysadm`) VALUES
+(53, 1, 1, '2026-04-09 08:21:02', 'admin'),
+(54, 1, 5, '2026-04-09 08:21:02', 'admin');
+
 -- --------------------------------------------------------
 
 --
@@ -332,10 +341,11 @@ INSERT INTO `church_storepermit` (`id`, `sid`, `fid`, `lastmod`, `admin`) VALUES
 CREATE TABLE `church_user` (
   `id` int(11) NOT NULL COMMENT '會員編號',
   `username` varchar(60) NOT NULL COMMENT '會員姓名/公司名稱',
+  `ename` varchar(100) DEFAULT NULL COMMENT '英文姐名',
   `image` longtext DEFAULT NULL COMMENT '會員照片圖檔',
   `useridno` varchar(20) DEFAULT NULL COMMENT '身份証號/護照號碼/統一編號',
   `gender` tinyint(1) NOT NULL COMMENT '性別 1:男  0:女',
-  `useremail` varchar(60) NOT NULL COMMENT 'email address',
+  `email` varchar(60) NOT NULL COMMENT 'email address',
   `birthday` date NOT NULL COMMENT '生日',
   `address` varchar(250) NOT NULL COMMENT '地址',
   `homephone` varchar(20) DEFAULT NULL COMMENT '家用電話',
@@ -343,17 +353,18 @@ CREATE TABLE `church_user` (
   `cellphone` varchar(20) NOT NULL COMMENT '行動電話',
   `fax` varchar(20) DEFAULT NULL COMMENT '傳真',
   `intro` text DEFAULT NULL COMMENT '會員簡介',
-  `enable` tinyint(1) NOT NULL COMMENT '是否啟用 1:是 0:否',
-  `ipmanage` tinyint(1) NOT NULL DEFAULT 0 COMMENT '登入IP是否控管 1:是 0:否'
+  `enable` tinyint(1) NOT NULL DEFAULT 1 COMMENT '是否啟用 1:是 0:否',
+  `ipmanage` tinyint(1) NOT NULL DEFAULT 0 COMMENT '登入IP是否控管 1:是 0:否',
+  `membership` tinyint(1) NOT NULL COMMENT '會友身份 0:慕道友 1:已入籍會友 2:未入會籍 3:已轉出會籍 4:新朋友(受洗）5:新朋友(未受洗)'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='會員基本資料';
 
 --
 -- 傾印資料表的資料 `church_user`
 --
 
-INSERT INTO `church_user` (`id`, `username`, `image`, `useridno`, `gender`, `useremail`, `birthday`, `address`, `homephone`, `officephone`, `cellphone`, `fax`, `intro`, `enable`, `ipmanage`) VALUES
-(1, '蔡耀松', NULL, NULL, 1, 'yaosung.tsai@gmail.com', '1970-10-28', '桃園市', NULL, NULL, '0935287902', NULL, NULL, 1, 0),
-(2, '彭國珍', NULL, NULL, 0, 'pck74@hotmail.com', '1956-08-16', '桃園市', NULL, NULL, '0981694789', NULL, NULL, 1, 0);
+INSERT INTO `church_user` (`id`, `username`, `ename`, `image`, `useridno`, `gender`, `email`, `birthday`, `address`, `homephone`, `officephone`, `cellphone`, `fax`, `intro`, `enable`, `ipmanage`, `membership`) VALUES
+(1, '蔡耀松', NULL, NULL, NULL, 1, 'yaosung.tsai@gmail.com', '1970-10-28', '桃園市', NULL, NULL, '0935287902', NULL, NULL, 1, 0, 1),
+(2, '彭國珍', NULL, NULL, NULL, 0, 'pck74@hotmail.com', '1956-08-16', '桃園市', NULL, NULL, '0981694789', NULL, NULL, 1, 0, 1);
 
 -- --------------------------------------------------------
 
@@ -586,7 +597,7 @@ ALTER TABLE `church_storepermit`
 --
 ALTER TABLE `church_user`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `useremail` (`useremail`);
+  ADD UNIQUE KEY `useremail` (`email`);
 
 --
 -- 資料表索引 `church_useradmin`
@@ -632,7 +643,7 @@ ALTER TABLE `church_user_ipmanage`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `church_authors`
 --
 ALTER TABLE `church_authors`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '管理員編號', AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '管理員編號', AUTO_INCREMENT=4;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `church_authors_ipmanage`
@@ -692,7 +703,7 @@ ALTER TABLE `church_login_log`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `church_permit`
 --
 ALTER TABLE `church_permit`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '流水號', AUTO_INCREMENT=52;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '流水號', AUTO_INCREMENT=55;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `church_store`
