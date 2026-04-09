@@ -169,7 +169,8 @@ function init_manage()
 			}
 			if ($rs_authors)	$rs_authors->Close();
 			$now = date("Y-m-d H:i:s");
-			$GLOBALS['adoconn']->Execute("insert into ".ADOPREFIX."_permit(aid,fid,lastupdate,sysadmin) values($aid,$fid,'$now','SYSTEM')");
+			$sql="insert into ".ADOPREFIX."_permit(aid,fid,lastupdate,sysadmin) values($aid,$fid,'$now','SYSTEM')";
+			$GLOBALS['adoconn']->Execute($sql);
 		}
 		if ($rs2)	$rs2->Close();
 	}

@@ -3,9 +3,9 @@
 * Company: 
 * Program: members.php
 * Author:  Ken Tsai
-* Date:    2023.05.25
+* Date:    2026.04.09
 * Version: 2.0
-* Description: 雙證件核對功能
+* Description: 會友管理
 */
 
 Header ("Cache-Control: no-cache, must-revalidate");  // HTTP/1.1
@@ -21,11 +21,11 @@ function membersmenu()
 	GraphicAdmin();
 	OpenTable();
 	echo "<center class='toptitle'>"._MEMBERSADMIN."</center>\n";
-	echo "<br/>";
+	echo "<br>";
 	echo "<a href='".$_SERVER['PHP_SELF']."?op=members&op2=membersadd'>"._MEMBERSADD."</a>|";
 	echo "<a href='".$_SERVER['PHP_SELF']."?op=members&op2=memberslist'>"._MEMBERSLIST."</a>&nbsp&nbsp";
 	CloseTable();
-	echo "<br/>";
+	echo "<br>";
 }
 
 /**
@@ -37,7 +37,7 @@ function memberslist(){
 	OpenTable();
 	echo "<center><font class='undertitle'>"._MEMBERSLIST."</font></center>\n";
 //會友身份 0:慕道友 1:已入籍會友 2:未入會籍 3:已轉出會籍 4:新朋友(受洗）5:新朋友(未受洗)
-	$sql="select id,name,ename, case membership 
+	$sql="select id,username,   case membership 
 								when 0 then '"._MEMBERSHIP0."' 
 								when 1 then '"._MEMBERSHIP1."' 
 								when 2 then '"._MEMBERSHIP2."' 
@@ -45,11 +45,12 @@ function memberslist(){
 								when 4 then '"._MEMBERSHIP4."' 
 								when 5 then '"._MEMBERSHIP5."' 
 								else '"._MEMBERSHIP0."' end 
-	from ".ADOPREFIX."_members order by id DESC";
-    $colnames= array(_ID,_NAME,_ENAME,_MEMBERSHIP,_FUNCTIONS);
+	from ".ADOPREFIX."_user order by id DESC";
+    $colnames= array(_ID,_NAME,_MEMBERSHIP,_FUNCTIONS);
     $links[0]['link']="op=members&op2=membersedit";
     $links[0]['label']=_EDIT;    
-  
+	$links[1]['link']="op=members&op2=membersrecord";
+    $links[1]['label']=_LOGINRECORD;  
     $rows=dbpage($GLOBALS['adoconn'],$sql,$colnames,$links);
 	CloseTable();
 	include_once("footer.php");
@@ -69,33 +70,21 @@ function memberslist(){
 	*/
 
 }
-/*
-function membersedit(){
-
-    membersmenu();
-    OpenTable();
-	$sql="SELECT id ,userNo, userID, mobileNo, name ,createDate from ".ADOPREFIX_OCR."_member where id='".$_GET['pkid']."' and status='2' order by id DESC";
-	$rs = $GLOBALS['adoconn_ocr']->Execute($sql);
-	$sql="SELECT * from ".ADOPREFIX_OCR."_pic where member_id='".$_GET['pkid']."' order by id DESC";
-	$rs_pic = $GLOBALS['adoconn_ocr']->Execute($sql);
-	echo "<center><font class='undertitle'>"._AUDITING."</font></center>\n";
-	echo "<table>\n";
-	echo "<form active='".$_SERVER['PHP_SELF']."' method='post'>\n";
-	echo "<input type='hidden' name='op' value='members'>\n";
-	echo "<input type='hidden' name='op2' value='memberseditting'>\n";
-	echo "<input type='hidden' name='pkid' value='".$rs->fields['id']."'>\n";
-	echo "<tr><td>"._USERNAME.":</td><td>".$rs->fields['name']."</td></tr>\n";
-	echo "<tr><td>"._CELLPHONE.":</td><td>".$rs->fields['mobileNo']."</td></tr>\n";
-	echo "<tr><td>"._USERID.":</td><td>".$rs->fields['userID']."</td></tr>\n";
-	echo "<tr><td>"._IDCARDUP.":</td><td>".strtoimg($rs_pic->fields['idCard_front_org'])."</td></tr>\n";
-	echo "<tr><td></td><td><input type='submit' value='"._OK."'></td></tr>\n";
-    echo "</form>\n";
-    echo "</table>\n";
-
+function  membersrecord(){
+	membersmenu();
+	OpenTable();
+	echo "<center><font class='undertitle'>"._LOGINRECORD."</font></center>\n";
+    $colnames= array(_ID,_NAME,_MEMBERSHIP,_FUNCTIONS);
+	$sql="select a.id,b.username,a.arrive_time from ".ADOPREFIX."_user_checkin a ,".ADOPREFIX."_user b where a.userid='".$_GET['pkid']."' and b.id=a.userid order by a.id DESC";
+	$rows=dbpage($GLOBALS['adoconn'],$sql,$colnames,0,0);
 	CloseTable();
 	echo "<br>";
 	include_once("footer.php");
+
+
 }
+
+/*
 
 function strtoimg($data){
 	$imgtype = array('data:image/jpeg;base64,', 'data:image/png;base64,');
@@ -122,7 +111,12 @@ if ($_REQUEST['op']==$op && isAuthority($_SESSION['aid'],$_REQUEST['op']))
 	switch ($_REQUEST['op2'])
 	{
 		
-		
+		case "membersrecord":	
+			membersrecord();
+		break;
+		case "membersedit":
+			membersedit();
+		break;
 		case "memberslist":	
 			memberslist();
 		break;
@@ -130,10 +124,6 @@ if ($_REQUEST['op']==$op && isAuthority($_SESSION['aid'],$_REQUEST['op']))
 			 membersmenu();
 			 include_once("footer.php");
 		break;
-		/*
-		case "membersedit":
-			membersedit();
-		break;*/
 
 	}
 }

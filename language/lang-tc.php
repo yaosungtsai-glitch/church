@@ -75,6 +75,8 @@ define("_DOWNLOAD","下載");
 define("_YEAR","年"); 
 define("_MONTH","月"); 
 define("_DAY","日"); 
+define("_MAN","男"); 
+define("_WOMAN","女"); 
 
 define("_FOOTERTXT", "本系統支援HTML5瀏覽器  最佳瀏覽器：<a href='https://www.google.com.tw/chrome/browser/desktop/' target=_blank >Chrome</a>、<a href='https://www.mozilla.org/zh-TW/firefox/new/' target=_blank >Firefox</a>");
 define("_NOHAVEPARAMS", "參數不完整");

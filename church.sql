@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2026-03-31 08:20:27
+-- 產生時間： 2026-04-08 12:34:21
 -- 伺服器版本： 10.4.32-MariaDB
 -- PHP 版本： 8.2.12
 
@@ -332,7 +332,7 @@ INSERT INTO `church_storepermit` (`id`, `sid`, `fid`, `lastmod`, `admin`) VALUES
 CREATE TABLE `church_user` (
   `id` int(11) NOT NULL COMMENT '會員編號',
   `username` varchar(60) NOT NULL COMMENT '會員姓名/公司名稱',
-  `image` varchar(100) DEFAULT NULL COMMENT '會員照片圖檔',
+  `image` longtext DEFAULT NULL COMMENT '會員照片圖檔',
   `useridno` varchar(20) DEFAULT NULL COMMENT '身份証號/護照號碼/統一編號',
   `gender` tinyint(1) NOT NULL COMMENT '性別 1:男  0:女',
   `useremail` varchar(60) NOT NULL COMMENT 'email address',
@@ -352,7 +352,8 @@ CREATE TABLE `church_user` (
 --
 
 INSERT INTO `church_user` (`id`, `username`, `image`, `useridno`, `gender`, `useremail`, `birthday`, `address`, `homephone`, `officephone`, `cellphone`, `fax`, `intro`, `enable`, `ipmanage`) VALUES
-(1, '蔡耀松', NULL, NULL, 1, 'yaosung.tsai@gmail.com', '1970-10-28', '', NULL, NULL, '0935287902', NULL, NULL, 1, 0);
+(1, '蔡耀松', NULL, NULL, 1, 'yaosung.tsai@gmail.com', '1970-10-28', '桃園市', NULL, NULL, '0935287902', NULL, NULL, 1, 0),
+(2, '彭國珍', NULL, NULL, 0, 'pck74@hotmail.com', '1956-08-16', '桃園市', NULL, NULL, '0981694789', NULL, NULL, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -452,7 +453,10 @@ INSERT INTO `church_user_checkin` (`id`, `userid`, `arrive_time`) VALUES
 (2, 1, '2026-03-31 13:38:24'),
 (3, 1, '2026-03-31 13:43:06'),
 (4, 1, '2026-03-31 14:01:18'),
-(5, 1, '2026-03-31 14:02:47');
+(5, 1, '2026-03-31 14:02:47'),
+(6, 1, '2026-04-08 18:16:38'),
+(7, 1, '2026-04-08 18:19:21'),
+(8, 1, '2026-04-08 18:19:44');
 
 -- --------------------------------------------------------
 
@@ -724,7 +728,7 @@ ALTER TABLE `church_storepermit`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `church_user`
 --
 ALTER TABLE `church_user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '會員編號', AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '會員編號', AUTO_INCREMENT=3;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `church_useradmin`
@@ -754,7 +758,7 @@ ALTER TABLE `church_userpermit`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `church_user_checkin`
 --
 ALTER TABLE `church_user_checkin`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'PK, Auto', AUTO_INCREMENT=6;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'PK, Auto', AUTO_INCREMENT=9;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `church_user_ipmanage`
