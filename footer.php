@@ -17,5 +17,6 @@ function foot()
 }
 
 foot();
+exit();
 
 ?>
