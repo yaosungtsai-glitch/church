@@ -48,11 +48,9 @@ if ($_REQUEST['op']==$op && isAuthority($_SESSION['aid'],$_REQUEST['op']))
         {
             case "membersadd":
                 membersadd();
-                exit();
             break;
             case "membersadding":
                 membersadding();
-                exit();
             break;
     
         }
